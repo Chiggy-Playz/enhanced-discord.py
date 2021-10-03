@@ -223,6 +223,16 @@ Channels
     :param after: The updated guild channel's new info.
     :type after: :class:`abc.GuildChannel`
 
+.. function:: on_group_join(channel, user)
+              on_group_remove(channel, user)
+
+    Called when someone joins or leaves a :class:`GroupChannel`.
+
+    :param channel: The group that the user joined or left.
+    :type channel: :class:`GroupChannel`
+    :param user: The user that joined or left.
+    :type user: :class:`User`
+
 .. function:: on_private_channel_update(before, after)
 
     Called whenever a private group DM is updated. e.g. changed name or topic.
@@ -253,6 +263,37 @@ Channels
     :type channel: :class:`abc.PrivateChannel`
     :param last_pin: The latest message that was pinned as an aware datetime in UTC. Could be ``None``.
     :type last_pin: Optional[:class:`datetime.datetime`]
+
+.. function:: on_typing(channel, user, when)
+
+    Called when someone begins typing a message.
+
+    The ``channel`` parameter can be a :class:`abc.Messageable` instance.
+    Which could either be :class:`TextChannel`, :class:`GroupChannel`, or
+    :class:`DMChannel`.
+
+    If the ``channel`` is a :class:`TextChannel` then the ``user`` parameter
+    is a :class:`Member`, otherwise it is a :class:`User`.
+
+    This requires :attr:`Intents.typing` to be enabled.
+
+    :param channel: The location where the typing originated from.
+    :type channel: :class:`abc.Messageable`
+    :param user: The user that started typing.
+    :type user: Union[:class:`User`, :class:`Member`]
+    :param when: When the typing started as an aware datetime in UTC.
+    :type when: :class:`datetime.datetime`
+
+.. function:: on_raw_typing(payload)
+
+    Called when someone begins typing a message. Unlike :func:`on_typing`, this is 
+    called regardless if the user can be found or not. This most often happens
+    when a user types in DMs.
+
+    This requires :attr:`Intents.typing` to be enabled.
+
+    :param payload: The raw typing payload.
+    :type payload: :class:`RawTypingEvent`
 
 Guilds
 ~~~~~~~
@@ -340,7 +381,45 @@ Guilds
     :param after: A list of stickers after the update.
     :type after: Sequence[:class:`GuildSticker`]
 
-integrations
+  .. function:: on_invite_create(invite)
+
+    Called when an :class:`Invite` is created.
+    You must have the :attr:`~Permissions.manage_channels` permission to receive this.
+
+    .. versionadded:: 1.3
+
+    .. note::
+
+        There is a rare possibility that the :attr:`Invite.guild` and :attr:`Invite.channel`
+        attributes will be of :class:`Object` rather than the respective models.
+
+    This requires :attr:`Intents.invites` to be enabled.
+
+    :param invite: The invite that was created.
+    :type invite: :class:`Invite`
+
+.. function:: on_invite_delete(invite)
+
+    Called when an :class:`Invite` is deleted.
+    You must have the :attr:`~Permissions.manage_channels` permission to receive this.
+
+    .. versionadded:: 1.3
+
+    .. note::
+
+        There is a rare possibility that the :attr:`Invite.guild` and :attr:`Invite.channel`
+        attributes will be of :class:`Object` rather than the respective models.
+
+        Outside of those two attributes, the only other attribute guaranteed to be
+        filled by the Discord gateway for this event is :attr:`Invite.code`.
+
+    This requires :attr:`Intents.invites` to be enabled.
+
+    :param invite: The invite that was deleted.
+    :type invite: :class:`Invite`
+
+
+Integrations
 ~~~~~~~~~~~~~
 
 .. function:: on_integration_create(integration)
@@ -395,6 +474,28 @@ integrations
 
     :param payload: The raw event payload data.
     :type payload: :class:`RawIntegrationDeleteEvent`
+
+Interactions
+~~~~~~~~~~~~~
+
+.. function:: on_interaction(interaction)
+
+    Called when an interaction happened.
+
+    This currently happens due to slash command invocations or components being used.
+
+    .. warning::
+
+        This is a low level function that is not generally meant to be used.
+        If you are working with components, consider using the callbacks associated
+        with the :class:`~discord.ui.View` instead as it provides a nicer user experience.
+
+    .. versionadded:: 2.0
+
+    :param interaction: The interaction data.
+    :type interaction: :class:`Interaction`
+
+
 
 Members
 ~~~~~~~~
@@ -615,6 +716,42 @@ Messages
 
     :param payload: The raw event payload data.
     :type payload: :class:`RawBulkMessageDeleteEvent`
+
+Meta
+~~~~~
+
+.. function:: on_error(event, *args, **kwargs)
+
+    Usually when an event raises an uncaught exception, a traceback is
+    printed to stderr and the exception is ignored. If you want to
+    change this behaviour and handle the exception for whatever reason
+    yourself, this event can be overridden. Which, when done, will
+    suppress the default action of printing the traceback.
+
+    The information of the exception raised and the exception itself can
+    be retrieved with a standard call to :func:`sys.exc_info`.
+
+    If you want exception to propagate out of the :class:`Client` class
+    you can define an ``on_error`` handler consisting of a single empty
+    :ref:`raise statement <py:raise>`. Exceptions raised by ``on_error`` will not be
+    handled in any way by :class:`Client`.
+
+    .. note::
+
+        ``on_error`` will only be dispatched to :meth:`Client.event`.
+
+        It will not be received by :meth:`Client.wait_for`, or, if used,
+        :ref:`ext_commands_api_bot` listeners such as
+        :meth:`~ext.commands.Bot.listen` or :meth:`~ext.commands.Cog.listener`.
+
+    :param event: The name of the event that raised the exception.
+    :type event: :class:`str`
+
+    :param args: The positional arguments for the event that raised the
+        exception.
+    :param kwargs: The keyword arguments for the event that raised the
+        exception.
+
 
 Networking
 ~~~~~~~~~~~
@@ -1017,138 +1154,6 @@ Voice
     :type before: :class:`VoiceState`
     :param after: The voice state after the changes.
     :type after: :class:`VoiceState`
-
-
-Others?
-~~~~~~~~
-
-.. function:: on_error(event, *args, **kwargs)
-
-    Usually when an event raises an uncaught exception, a traceback is
-    printed to stderr and the exception is ignored. If you want to
-    change this behaviour and handle the exception for whatever reason
-    yourself, this event can be overridden. Which, when done, will
-    suppress the default action of printing the traceback.
-
-    The information of the exception raised and the exception itself can
-    be retrieved with a standard call to :func:`sys.exc_info`.
-
-    If you want exception to propagate out of the :class:`Client` class
-    you can define an ``on_error`` handler consisting of a single empty
-    :ref:`raise statement <py:raise>`. Exceptions raised by ``on_error`` will not be
-    handled in any way by :class:`Client`.
-
-    .. note::
-
-        ``on_error`` will only be dispatched to :meth:`Client.event`.
-
-        It will not be received by :meth:`Client.wait_for`, or, if used,
-        :ref:`ext_commands_api_bot` listeners such as
-        :meth:`~ext.commands.Bot.listen` or :meth:`~ext.commands.Cog.listener`.
-
-    :param event: The name of the event that raised the exception.
-    :type event: :class:`str`
-
-    :param args: The positional arguments for the event that raised the
-        exception.
-    :param kwargs: The keyword arguments for the event that raised the
-        exception.
-
-
-.. function:: on_group_join(channel, user)
-              on_group_remove(channel, user)
-
-    Called when someone joins or leaves a :class:`GroupChannel`.
-
-    :param channel: The group that the user joined or left.
-    :type channel: :class:`GroupChannel`
-    :param user: The user that joined or left.
-    :type user: :class:`User`
-
-.. function:: on_interaction(interaction)
-
-    Called when an interaction happened.
-
-    This currently happens due to slash command invocations or components being used.
-
-    .. warning::
-
-        This is a low level function that is not generally meant to be used.
-        If you are working with components, consider using the callbacks associated
-        with the :class:`~discord.ui.View` instead as it provides a nicer user experience.
-
-    .. versionadded:: 2.0
-
-    :param interaction: The interaction data.
-    :type interaction: :class:`Interaction`
-
-.. function:: on_invite_create(invite)
-
-    Called when an :class:`Invite` is created.
-    You must have the :attr:`~Permissions.manage_channels` permission to receive this.
-
-    .. versionadded:: 1.3
-
-    .. note::
-
-        There is a rare possibility that the :attr:`Invite.guild` and :attr:`Invite.channel`
-        attributes will be of :class:`Object` rather than the respective models.
-
-    This requires :attr:`Intents.invites` to be enabled.
-
-    :param invite: The invite that was created.
-    :type invite: :class:`Invite`
-
-.. function:: on_invite_delete(invite)
-
-    Called when an :class:`Invite` is deleted.
-    You must have the :attr:`~Permissions.manage_channels` permission to receive this.
-
-    .. versionadded:: 1.3
-
-    .. note::
-
-        There is a rare possibility that the :attr:`Invite.guild` and :attr:`Invite.channel`
-        attributes will be of :class:`Object` rather than the respective models.
-
-        Outside of those two attributes, the only other attribute guaranteed to be
-        filled by the Discord gateway for this event is :attr:`Invite.code`.
-
-    This requires :attr:`Intents.invites` to be enabled.
-
-    :param invite: The invite that was deleted.
-    :type invite: :class:`Invite`
-
-.. function:: on_typing(channel, user, when)
-
-    Called when someone begins typing a message.
-
-    The ``channel`` parameter can be a :class:`abc.Messageable` instance.
-    Which could either be :class:`TextChannel`, :class:`GroupChannel`, or
-    :class:`DMChannel`.
-
-    If the ``channel`` is a :class:`TextChannel` then the ``user`` parameter
-    is a :class:`Member`, otherwise it is a :class:`User`.
-
-    This requires :attr:`Intents.typing` to be enabled.
-
-    :param channel: The location where the typing originated from.
-    :type channel: :class:`abc.Messageable`
-    :param user: The user that started typing.
-    :type user: Union[:class:`User`, :class:`Member`]
-    :param when: When the typing started as an aware datetime in UTC.
-    :type when: :class:`datetime.datetime`
-
-.. function:: on_raw_typing(payload)
-
-    Called when someone begins typing a message. Unlike :func:`on_typing`, this is 
-    called regardless if the user can be found or not. This most often happens
-    when a user types in DMs.
-
-    This requires :attr:`Intents.typing` to be enabled.
-
-    :param payload: The raw typing payload.
-    :type payload: :class:`RawTypingEvent`
 
 .. _discord-api-utils:
 
