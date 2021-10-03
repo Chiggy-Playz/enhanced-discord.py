@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slash Commands</title> 
+  <!-- end extra head -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+  <link rel="stylesheet" type="text/css" href="../../_static/basic.css" />
+  <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/codeblocks.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/icons.css" type="text/css" />
+  <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+  <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+  <script src="../../_static/jquery.js"></script>
+  <script src="../../_static/underscore.js"></script>
+  <script src="../../_static/doctools.js"></script>
+  <script src="../../_static/custom.js"></script>
+  <script src="../../_static/settings.js"></script>
+  <script src="../../_static/copy.js"></script>
+  <script src="../../_static/sidebar.js"></script>
+  <link rel="shortcut icon" href="../../_static/discord_py_logo.ico"/>
+  <link rel="index" title="Index" href="../../genindex.html" />
+  <link rel="search" title="Search" href="../../search.html" />
+  <link rel="next" title="API Reference" href="api.html" />
+  <link rel="prev" title="Extensions" href="extensions.html" />
+</head>
+<body>
+  <div class="main-grid">
+    <header class="grid-item">
+      <nav>
+        <a href="../../index.html" class="main-heading">discord.py</a>
+        <a href="https://github.com/Rapptz/discord.py" title="GitHub"><span class="material-icons custom-icons">github</span></a>
+        <a href="https://discord.gg/TvqYBrGXEm" title="Discord"><span class="material-icons custom-icons">discord</span></a>
+        <a href="../../faq.html" title="FAQ"><span class="material-icons">help_center</span></a>
+        <a onclick="mobileSearch.open();" title="Search" id="open-search" class="mobile-only"><span class="material-icons">search</span></a>
+        <a onclick="mobileSearch.close();" title="Close" id="close-search" class="mobile-only" hidden><span class="material-icons">close</span></a>
+      </nav>
+      <nav class="mobile-only">
+        <form role="search" class="search" action="../../search.html" method="get">
+          <div class="search-wrapper">
+            <input type="search" name="q" placeholder="Search documentation" />
+            <button type="submit">
+              <span class="material-icons">search</span>
+            </button>
+          </div>
+        </form>
+      </nav>
+    </header>
+    <div class="sub-header grid-item">
+      <label for="documentation_select">View Documentation For</label>
+      <select id="documentation_select" onchange="window.location = this.value;">
+        <option value="../../index.html">discord</option>
+        <option value="index.html" selected>discord.ext.commands</option>
+        <option value="../tasks/index.html" >discord.ext.tasks</option>
+      </select>
+      <form role="search" class="search" action="../../search.html" method="get">
+        <div class="search-wrapper">
+          <input type="search" name="q" placeholder="Search documentation" />
+          <button type="submit">
+            <span class="material-icons">search</span>
+          </button>
+        </div>
+      </form>
+      <a accesskey="S" class="settings" onclick="settingsModal.open();"><span class="material-icons">settings</span></a>
+    </div>
+    <aside class="grid-item">
+      <span id="settings-toggle" class="settings" onclick="settingsModal.open();">
+        <span class="material-icons">settings</span>
+      </span>
+      <div id="sidebar">
+      </div>
+    </aside>
+    <main class="grid-item" role="main">
+      
+  <section id="slash-commands">
+<span id="ext-commands-slash-commands"></span><h1>Slash Commands<a class="headerlink" href="#slash-commands" title="Permalink to this headline">¶</a></h1>
+<p>Slash Commands are currently supported in enhanced-discord.py using a system on top of ext.commands.</p>
+<p>This system is very simple to use, and can be enabled via <a class="reference internal" href="api.html#discord.ext.commands.Bot.slash_commands" title="discord.ext.commands.Bot.slash_commands"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Bot.slash_commands</span></code></a> globally,
+or only for specific commands via <a class="reference internal" href="api.html#discord.ext.commands.Command.slash_command" title="discord.ext.commands.Command.slash_command"><code class="xref py py-attr docutils literal notranslate"><span class="pre">Command.slash_command</span></code></a>.</p>
+<p>There is also the parameter <code class="docutils literal notranslate"><span class="pre">slash_command_guilds</span></code> which can be passed to either <a class="reference internal" href="api.html#discord.ext.commands.Bot" title="discord.ext.commands.Bot"><code class="xref py py-class docutils literal notranslate"><span class="pre">Bot</span></code></a> or the command
+decorator in order to only upload the commands as guild commands to these specific guild IDs, however this
+should only be used for testing or small (&lt;10 guilds) bots.</p>
+<p>If you want to add option descriptions to your commands, you should use <a class="reference internal" href="api.html#discord.ext.commands.Option" title="discord.ext.commands.Option"><code class="xref py py-class docutils literal notranslate"><span class="pre">Option</span></code></a></p>
+<p>For troubleshooting, see the <a class="reference internal" href="../../faq.html#ext-commands-slash-command-troubleshooting"><span class="std std-ref">FAQ</span></a></p>
+<div class="admonition-slash-command-only admonition">
+<p class="admonition-title">Slash Command Only</p>
+<p>For parts of the docs specific to slash commands, look for this box!</p>
+</div>
+</section>
+
+
+    </main>
+    <footer class="grid-item">
+        &#169; Copyright 2015-present, Rapptz.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.2.0.
+    </footer>
+  </div>
+
+  <div id="settings" class="modal" onclick="if (event.target == this){ settingsModal.close(); }" hidden>
+    <div class="modal-content">
+      <span class="close" onclick="settingsModal.close();" title="Close">
+        <span class="material-icons">close</span>
+      </span>
+      <h1>Settings</h1>
+
+      <h2>Font</h2>
+      <div class="setting">
+        <h3>Use a serif font:
+          <label class="toggle"
+            title="Use a serif font? Your system font will be used, falling back to serif.">
+            <input type="checkbox" name="useSerifFont" onclick="updateSetting(this);">
+            <span class="toggle-slider"></span>
+          </label>
+        </h3>
+      </div>
+
+      <h2>Theme</h2>
+      <div class="setting">
+        <h3>
+          <label class="toggle" title="Set your theme based on your system preferences">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="automatic" checked>
+          </label>
+          Automatic
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to light theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="light">
+          </label>
+          Light
+        </h3>
+        <h3>
+          <label class="toggle" title="Set your theme to dark theme">
+            <input type="radio" name="setTheme" onclick="updateSetting(this);" value="dark">
+          </label>
+          Dark
+        </h3>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="to-top" onclick="scrollToTop()" hidden>
+    <span><span class="material-icons">arrow_upward</span> to top</span>
+  </div>
+
+</body>
+</html>
