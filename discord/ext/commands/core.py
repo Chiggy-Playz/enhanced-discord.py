@@ -1250,10 +1250,9 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
             annotation = str
             origin = None
 
-        if not required and origin is Union and annotation.__args__[-1] is type(None):
+        if not required and origin is not None and len(annotation.__args__) == 2:
             # Unpack Optional[T] (Union[T, None]) into just T
-            annotation = annotation.__args__[0]
-            origin = getattr(annotation, "__origin__", None)
+            annotation, origin = annotation.__args__[0], None
 
         option: Dict[str, Any] = {
             "type": 3,
@@ -1283,9 +1282,9 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
             if annotation in {Union[discord.Member, discord.Role], Union[MemberConverter, RoleConverter]}:
                 option["type"] = 9
 
-            elif all([issubclass(x, (discord.abc.GuildChannel, discord.abc.Messageable)) for x in annotation.__args__]):
+            elif all([arg in application_option_channel_types for arg in annotation.__args__]):
                 option["type"] = 7
-                option["channel_types"] = [x for y in annotation.__args__ for x in application_option_channel_types[y]]
+                option["channel_types"] = [discord_value for arg in annotation.__args__ for discord_value in application_option_channel_types[arg]]
 
         elif origin is Literal:
             literal_values = annotation.__args__
