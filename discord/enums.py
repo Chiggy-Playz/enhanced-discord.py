@@ -590,6 +590,65 @@ class NSFWLevel(Enum, comparable=True):
     age_restricted = 3
 
 
+class ProtocolUrls(Enum):
+
+    # General
+
+    home = "discord://-/channels/@me/"
+    nitro = "discord://-/store"
+    apps = "discord://-/apps"  # Breaks the client on windows (Shows download links for different OS)
+    server_discovery = "discord://-/discovery"
+    new_server = "discord://-/guilds/create"
+    server_invite = "discord://-/invite/invite_code"  # TODO
+
+    # Settings
+
+    account_settings = "discord://-/settings/account"
+    profile_settings = "discord://-/settings/profile-customization"
+    privacy_settings = "discord://-/settings/privacy-safety"
+    safety_settings = "discord://-/settings/privacy-safety"
+    authorized_apps_settings = "discord://-/settings/authorized-apps"
+    connections_settings = "discord://-/settings/connections"
+    nitro_settings = "discord://-/settings/premium"  # Same as store, but inside of settings
+    server_boost_settings = "discord://-/settings/premium-guild-subscription"
+    subscription_settings = "discord://-/settings/subscriptions"
+    gift_inventory_settings = "discord://-/settings/inventory"
+    billing_settings = "discord://-/settings/billing"
+    appearance_settings = "discord://-/settings/appearance"
+    accessibility_settings = "discord://-/settings/accessibility"
+    voice_video_settings = "discord://-/settings/voice"
+    text_images_settings = "discord://-/settings/text"
+    notifications_settings = "discord://-/settings/notifications"
+    keybinds_settings = "discord://-/settings/keybinds"
+    language_settings = "discord://-/settings/locale"
+    windows_settings = "discord://-/settings/windows"
+    linux_settings = "discord://-/settings/linux"
+    streamer_mode_settings = "discord://-/settings/streamer-mode"
+    advanced_settings = "discord://-/settings/advanced"
+    activity_status_settings = "discord://-/settings/activity-status"
+    game_overlay_settings = "discord://-/settings/overlay"
+    hypesquad_settings = "discord://-/settings/hypersquad-online"
+
+    changelogs = "discord://-/settings/changelogs"
+    experiments = (
+        "discord://-/settings/experiments"  # Doesn't work if you don't have it actually activated. Just blank screen.
+    )
+    developer_options = "discord://-/settings/developer-options"  # Same as experiments
+    hotspot_options = "discord://-/settings/hotspot-options"  # Same as experiments
+
+    # Users, Guilds, and DMs
+    user_profile = "discord://-/users/user_id"  # TODO
+    dm_channel = "discord://-/channels/@me/channel_id"  # TODO
+    dm_message = "discord://-/channels/@me/channel_id/message_id"  # TODO
+    guild_channel = "discord://-/channels/guild_id/channel_id"  # TODO
+    guild_message = "discord://-/channels/guild_id/channel_id/message_id"  # TODO
+    guild_membership_screening = "discord://-/member-verification/guild_id"  # TODO
+
+    # Library
+    games_library = "discord://-/library"
+    library_settings = "discord://-/library/settings"
+
+
 T = TypeVar("T")
 
 
