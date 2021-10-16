@@ -647,17 +647,16 @@ class ProtocolUrls(Enum):
     guild_membership_screening = "discord://-/member-verification/{guild_id}"
 
     # Library
-    
+
     games_library = "discord://-/library"
     library_settings = "discord://-/library/settings"
-
 
     def __str__(self):
         return self.value
 
     def format(self, **kwargs):
         return self.value.format(**kwargs)
-    
+
 
 T = TypeVar("T")
 
