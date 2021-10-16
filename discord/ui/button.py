@@ -60,7 +60,7 @@ class Button(Item[V]):
         The ID of the button that gets received during an interaction.
         If this button is for a URL, it does not have a custom ID.
     url: Optional[:class:`str`]
-        The URL this button sends you to.
+        The URL this button sends you to. This param is automatically casted to :class:`str`.
     disabled: :class:`bool`
         Whether the button is disabled or not.
     label: Optional[:class:`str`]
