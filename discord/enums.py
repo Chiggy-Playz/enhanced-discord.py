@@ -651,10 +651,10 @@ class ProtocolUrl(Enum):
     games_library = "discord://-/library"
     library_settings = "discord://-/library/settings"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.value
 
-    def format(self, **kwargs):
+    def format(self, **kwargs) -> str:
         return self.value.format(**kwargs)
 
 
