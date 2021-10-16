@@ -55,6 +55,7 @@ __all__ = (
     "InteractionType",
     "InteractionResponseType",
     "NSFWLevel",
+    "ProtocolUrl"
 )
 
 
