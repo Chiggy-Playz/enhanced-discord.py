@@ -117,7 +117,7 @@ class Button(Item[V]):
         self._underlying = ButtonComponent._raw_construct(
             type=ComponentType.button,
             custom_id=custom_id,
-            url=url,
+            url=str(url) if url else None,
             disabled=disabled,
             label=label,
             style=style,

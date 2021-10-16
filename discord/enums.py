@@ -597,16 +597,16 @@ class ProtocolUrls(Enum):
     home = "discord://-/channels/@me/"
     nitro = "discord://-/store"
     apps = "discord://-/apps"  # Breaks the client on windows (Shows download links for different OS)
-    server_discovery = "discord://-/discovery"
+    server_discovery = "discord://-/guild-discovery"
     new_server = "discord://-/guilds/create"
-    server_invite = "discord://-/invite/invite_code"  # TODO
+    server_invite = "discord://-/invite/{invite_code}"
 
     # Settings
 
     account_settings = "discord://-/settings/account"
     profile_settings = "discord://-/settings/profile-customization"
-    privacy_settings = "discord://-/settings/privacy-safety"
-    safety_settings = "discord://-/settings/privacy-safety"
+    privacy_settings = "discord://-/settings/privacy-and-safety"
+    safety_settings = "discord://-/settings/privacy-and-safety"  # Alias
     authorized_apps_settings = "discord://-/settings/authorized-apps"
     connections_settings = "discord://-/settings/connections"
     nitro_settings = "discord://-/settings/premium"  # Same as store, but inside of settings
@@ -621,33 +621,43 @@ class ProtocolUrls(Enum):
     notifications_settings = "discord://-/settings/notifications"
     keybinds_settings = "discord://-/settings/keybinds"
     language_settings = "discord://-/settings/locale"
-    windows_settings = "discord://-/settings/windows"
-    linux_settings = "discord://-/settings/linux"
+    windows_settings = "discord://-/settings/windows"  # Doesnt work if used on wrong platform
+    linux_settings = "discord://-/settings/linux"  # Doesnt work if used on wrong platform
     streamer_mode_settings = "discord://-/settings/streamer-mode"
     advanced_settings = "discord://-/settings/advanced"
     activity_status_settings = "discord://-/settings/activity-status"
     game_overlay_settings = "discord://-/settings/overlay"
-    hypesquad_settings = "discord://-/settings/hypersquad-online"
+    hypesquad_settings = "discord://-/settings/hypesquad-online"
 
     changelogs = "discord://-/settings/changelogs"
     experiments = (
         "discord://-/settings/experiments"  # Doesn't work if you don't have it actually activated. Just blank screen.
     )
+
     developer_options = "discord://-/settings/developer-options"  # Same as experiments
     hotspot_options = "discord://-/settings/hotspot-options"  # Same as experiments
 
     # Users, Guilds, and DMs
-    user_profile = "discord://-/users/user_id"  # TODO
-    dm_channel = "discord://-/channels/@me/channel_id"  # TODO
-    dm_message = "discord://-/channels/@me/channel_id/message_id"  # TODO
-    guild_channel = "discord://-/channels/guild_id/channel_id"  # TODO
-    guild_message = "discord://-/channels/guild_id/channel_id/message_id"  # TODO
-    guild_membership_screening = "discord://-/member-verification/guild_id"  # TODO
+
+    user_profile = "discord://-/users/{user_id}"
+    dm_channel = "discord://-/channels/@me/{channel_id}"
+    dm_message = "discord://-/channels/@me/{channel_id}/{message_id}"
+    guild_channel = "discord://-/channels/{guild_id}/{channel_id}"
+    guild_message = "discord://-/channels/{guild_id}/{channel_id}/{message_id}"
+    guild_membership_screening = "discord://-/member-verification/{guild_id}"
 
     # Library
+    
     games_library = "discord://-/library"
     library_settings = "discord://-/library/settings"
 
+
+    def __str__(self):
+        return self.value
+
+    def format(self, **kwargs):
+        return self.value.format(**kwargs)
+    
 
 T = TypeVar("T")
 
