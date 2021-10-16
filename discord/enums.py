@@ -590,7 +590,7 @@ class NSFWLevel(Enum, comparable=True):
     age_restricted = 3
 
 
-class ProtocolUrls(Enum):
+class ProtocolUrl(Enum):
 
     # General
 
