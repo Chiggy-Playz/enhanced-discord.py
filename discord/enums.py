@@ -598,9 +598,9 @@ class ProtocolUrl(Enum):
     home = "discord://-/channels/@me/"
     nitro = "discord://-/store"
     apps = "discord://-/apps"  # Breaks the client on windows (Shows download links for different OS)
-    server_discovery = "discord://-/guild-discovery"
-    new_server = "discord://-/guilds/create"
-    server_invite = "discord://-/invite/{invite_code}"
+    guild_discovery = "discord://-/guild-discovery"
+    new_guild = "discord://-/guilds/create"
+    guild_invite = "discord://-/invite/{invite_code}"
 
     # Settings
 
@@ -611,7 +611,7 @@ class ProtocolUrl(Enum):
     authorized_apps_settings = "discord://-/settings/authorized-apps"
     connections_settings = "discord://-/settings/connections"
     nitro_settings = "discord://-/settings/premium"  # Same as store, but inside of settings
-    server_boost_settings = "discord://-/settings/premium-guild-subscription"
+    guild_premium_subscription = "discord://-/settings/premium-guild-subscription"
     subscription_settings = "discord://-/settings/subscriptions"
     gift_inventory_settings = "discord://-/settings/inventory"
     billing_settings = "discord://-/settings/billing"
