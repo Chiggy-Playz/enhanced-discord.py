@@ -24,7 +24,7 @@ DEALINGS IN THE SOFTWARE.
 
 from __future__ import annotations
 
-from typing import Callable, Optional, TYPE_CHECKING, Tuple, Type, TypeVar, Union
+from typing import Any, Callable, Optional, TYPE_CHECKING, Tuple, Type, TypeVar, Union
 import inspect
 import os
 
@@ -91,7 +91,7 @@ class Button(Item[V]):
         label: Optional[str] = None,
         disabled: bool = False,
         custom_id: Optional[str] = None,
-        url: Optional[str] = None,
+        url: Optional[Any] = None,
         emoji: Optional[Union[str, Emoji, PartialEmoji]] = None,
         row: Optional[int] = None,
     ):
