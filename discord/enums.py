@@ -655,7 +655,7 @@ class ProtocolUrl(Enum):
     def __str__(self) -> str:
         return self.value
 
-    def format(self, **kwargs) -> str:
+    def format(self, **kwargs: Any) -> str:
         return self.value.format(**kwargs)
 
 
