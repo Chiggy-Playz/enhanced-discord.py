@@ -631,9 +631,9 @@ class ProtocolUrl(Enum):
     hypesquad_settings = "discord://-/settings/hypesquad-online"
 
     changelogs = "discord://-/settings/changelogs"
-    experiments = (
-        "discord://-/settings/experiments"  # Doesn't work if you don't have it actually activated. Just blank screen.
-    )
+
+    # Doesn't work if you don't have it actually activated. Just blank screen.
+    experiments = "discord://-/settings/experiments"
 
     developer_options = "discord://-/settings/developer-options"  # Same as experiments
     hotspot_options = "discord://-/settings/hotspot-options"  # Same as experiments
