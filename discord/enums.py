@@ -599,7 +599,7 @@ class ProtocolUrl(Enum):
     nitro = "discord://-/store"
     apps = "discord://-/apps"  # Breaks the client on windows (Shows download links for different OS)
     guild_discovery = "discord://-/guild-discovery"
-    new_guild = "discord://-/guilds/create"
+    guild_create = "discord://-/guilds/create"
     guild_invite = "discord://-/invite/{invite_code}"
 
     # Settings
