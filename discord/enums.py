@@ -55,7 +55,7 @@ __all__ = (
     "InteractionType",
     "InteractionResponseType",
     "NSFWLevel",
-    "ProtocolUrl",
+    "ProtocolURL",
 )
 
 
@@ -591,7 +591,7 @@ class NSFWLevel(Enum, comparable=True):
     age_restricted = 3
 
 
-class ProtocolUrl(Enum):
+class ProtocolURL(Enum):
 
     # General
 
