@@ -63,6 +63,7 @@ if TYPE_CHECKING:
     from .ui.view import View
     from .channel import TextChannel, CategoryChannel, StoreChannel, PartialMessageable
     from .threads import Thread
+    from ui.modal import Modal
 
     InteractionChannel = Union[TextChannel, CategoryChannel, StoreChannel, Thread, PartialMessageable]
 
@@ -671,6 +672,21 @@ class InteractionResponse:
 
         self.responded_at = utils.utcnow()
 
+    async def send_modal(self, modal: Modal):
+        if self.is_done():
+            raise InteractionResponded(self._parent)
+        
+        payload: Dict[str, Any]= modal.to_dict()
+        parent = self._parent
+
+        adapter = async_context.get()
+        await adapter.create_interaction_response(
+            parent.id,
+            parent.token,
+            session=parent._session,
+            type=InteractionResponseType.modal.value,
+            data=payload,
+        )
 
 class _InteractionMessageState:
     __slots__ = ("_parent", "_interaction")
