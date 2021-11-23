@@ -6,6 +6,8 @@ import os
 from .item import Item
 from itertools import groupby
 
+from .view import _ViewWeights as _ModalWeights
+
 __all__ = ('Modal',)
 
 class Modal:
@@ -26,7 +28,9 @@ class Modal:
 
         if not custom_id:
             self.custom_id = os.urandom(16).hex()
-    
+
+        self.__weights = _ModalWeights(self.children)
+
     def add_item(self, item: Item):
         if not isinstance(item, Item):
             raise TypeError(f"expected Item not {item.__class__!r}")
@@ -34,6 +38,7 @@ class Modal:
         if len(self.children) > 5:
             raise ValueError("Modal can only have a maximum of 5 items")
 
+        self.__weights.add_item(item)
         self.children.append(item)
     
     def remove_item(self, item: Item):
@@ -42,6 +47,8 @@ class Modal:
             self.children.remove(item)
         except ValueError:
             pass
+        else:
+            self.__weights.remove_item(item)
 
     def to_components(self) -> List[Dict[str, Any]]:
         def key(item: Item) -> int:
