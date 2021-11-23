@@ -56,6 +56,7 @@ __all__ = (
     "InteractionResponseType",
     "NSFWLevel",
     "ProtocolURL",
+    "InputTextStyle"
 )
 
 
@@ -556,7 +557,8 @@ class ComponentType(Enum):
     action_row = 1
     button = 2
     select = 3
-
+    input_text = 4
+    
     def __int__(self):
         return self.value
 
@@ -660,6 +662,13 @@ class ProtocolURL(Enum):
     def format(self, **kwargs: Any) -> str:
         return self.value.format(**kwargs)
 
+class InputTextStyle(Enum):
+
+    short = 1
+    long = 2
+
+    # Aliases
+    paragraph = 2
 
 T = TypeVar("T")
 
@@ -680,3 +689,4 @@ def try_enum(cls: Type[T], val: Any) -> T:
         return cls._enum_value_map_[val]  # type: ignore
     except (KeyError, TypeError, AttributeError):
         return create_unknown_value(cls, val)
+

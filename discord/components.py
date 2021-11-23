@@ -25,7 +25,7 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 
 from typing import Any, ClassVar, Dict, List, Optional, TYPE_CHECKING, Tuple, Type, TypeVar, Union
-from .enums import try_enum, ComponentType, ButtonStyle
+from .enums import try_enum, ComponentType, ButtonStyle, InputTextStyle
 from .utils import get_slots, MISSING
 from .partial_emoji import PartialEmoji, _EmojiTag
 
@@ -36,6 +36,7 @@ if TYPE_CHECKING:
         SelectMenu as SelectMenuPayload,
         SelectOption as SelectOptionPayload,
         ActionRow as ActionRowPayload,
+        InputText as InputTextPayload,
     )
     from .emoji import Emoji
 
@@ -368,6 +369,48 @@ class SelectOption:
             payload["description"] = self.description
 
         return payload
+
+
+class InputText(Component):
+
+    __slots__: Tuple[str, ...] = (
+        "type",
+        "custom_id",
+        "label",
+        "style",
+        "style",
+        "placeholder",
+        "min_length",
+        "max_length",
+    )
+
+    __repr_info__: ClassVar[Tuple[str, ...]] = __slots__
+
+    def __init__(self, data: InputTextPayload) -> None:
+        self.type = ComponentType.input_text
+        self.custom_id: str = data["custom_id"]
+        self.label: str = data["label"]
+        self.style: InputTextStyle = try_enum(InputTextStyle, data["style"])
+        self.placeholder: Optional[str] = data.get("placeholder", None)
+        self.min_length: Optional[int] = data.get("min_length", None)
+        self.max_length: Optional[int] = data.get("max_length", None)
+
+    def to_dict(self) -> InputTextPayload:
+        payload = {"type": 4, "style": self.style.value, "label": self.label}
+
+        if self.custom_id:
+            payload["custom_id"] = self.custom_id
+
+        if self.placeholder:
+            payload["placeholder"] = self.placeholder
+
+        if self.min_length:
+            payload["min_length"] = self.min_length
+
+        if self.max_length:
+            payload["max_length"] = self.max_length
+
+        return payload  # type: ignore
 
 
 def _component_factory(data: ComponentPayload) -> Component:
