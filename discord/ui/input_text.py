@@ -122,4 +122,3 @@ class InputText(Item):
 
     def refresh_state(self, interaction: Interaction) -> None:
         data: ComponentInteractionData = interaction.data # type: ignore
-        print(data)
