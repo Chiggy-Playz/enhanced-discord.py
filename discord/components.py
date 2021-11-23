@@ -378,7 +378,6 @@ class InputText(Component):
         "custom_id",
         "label",
         "style",
-        "style",
         "placeholder",
         "min_length",
         "max_length",
