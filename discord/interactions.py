@@ -463,6 +463,7 @@ class InteractionResponse:
         view: View = MISSING,
         tts: bool = False,
         ephemeral: bool = False,
+        delete_after: float = MISSING,
     ) -> None:
         """|coro|
 
@@ -542,6 +543,17 @@ class InteractionResponse:
             self._parent._state.store_view(view)
 
         self.responded_at = utils.utcnow()
+
+        if delete_after is not MISSING:
+
+            async def delete(delay: float):
+                await asyncio.sleep(delay)
+                try:
+                    await parent.delete_original_message()
+                except HTTPException:
+                    pass
+
+            asyncio.create_task(delete(delete_after))
 
     async def edit_message(
         self,
