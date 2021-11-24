@@ -687,8 +687,8 @@ class InteractionResponse:
     async def send_modal(self, modal: Modal):
         if self.is_done():
             raise InteractionResponded(self._parent)
-        
-        payload: Dict[str, Any]= modal.to_dict()
+
+        payload: Dict[str, Any] = modal.to_dict()
         parent = self._parent
 
         adapter = async_context.get()
@@ -699,6 +699,7 @@ class InteractionResponse:
             type=InteractionResponseType.modal.value,
             data=payload,
         )
+
 
 class _InteractionMessageState:
     __slots__ = ("_parent", "_interaction")

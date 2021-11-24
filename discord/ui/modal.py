@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 from typing import Any, Dict, List, Optional
 
@@ -8,7 +7,8 @@ from itertools import groupby
 
 from .view import _ViewWeights as _ModalWeights
 
-__all__ = ('Modal',)
+__all__ = ("Modal",)
+
 
 class Modal:
     """Represents a UI Modal.
@@ -18,10 +18,8 @@ class Modal:
     .. versionadded:: 2.0
     """
 
-    def __init__(self,
-                 title: str,
-                 custom_id: Optional[str] = None) -> None:
-        
+    def __init__(self, title: str, custom_id: Optional[str] = None) -> None:
+
         self.title = title
         self.custom_id = custom_id
         self.children = []
@@ -34,15 +32,15 @@ class Modal:
     def add_item(self, item: Item):
         if not isinstance(item, Item):
             raise TypeError(f"expected Item not {item.__class__!r}")
-        
+
         if len(self.children) > 5:
             raise ValueError("Modal can only have a maximum of 5 items")
 
         self.__weights.add_item(item)
         self.children.append(item)
-    
+
     def remove_item(self, item: Item):
-        
+
         try:
             self.children.remove(item)
         except ValueError:
@@ -69,7 +67,7 @@ class Modal:
             )
 
         return components
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "title": self.title,

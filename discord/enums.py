@@ -56,7 +56,7 @@ __all__ = (
     "InteractionResponseType",
     "NSFWLevel",
     "ProtocolURL",
-    "InputTextStyle"
+    "InputTextStyle",
 )
 
 
@@ -544,7 +544,8 @@ class InteractionResponseType(Enum):
     deferred_message_update = 6  # for components
     message_update = 7  # for components
     application_command_autocomplete_result = 8
-    modal = 9 # forms
+    modal = 9  # forms
+
 
 class VideoQualityMode(Enum):
     auto = 1
@@ -559,7 +560,7 @@ class ComponentType(Enum):
     button = 2
     select = 3
     input_text = 4
-    
+
     def __int__(self):
         return self.value
 
@@ -663,6 +664,7 @@ class ProtocolURL(Enum):
     def format(self, **kwargs: Any) -> str:
         return self.value.format(**kwargs)
 
+
 class InputTextStyle(Enum):
 
     short = 1
@@ -670,6 +672,7 @@ class InputTextStyle(Enum):
 
     # Aliases
     paragraph = 2
+
 
 T = TypeVar("T")
 
@@ -690,4 +693,3 @@ def try_enum(cls: Type[T], val: Any) -> T:
         return cls._enum_value_map_[val]  # type: ignore
     except (KeyError, TypeError, AttributeError):
         return create_unknown_value(cls, val)
-
