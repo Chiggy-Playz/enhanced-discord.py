@@ -52,6 +52,7 @@ from typing import (
     Type,
     Union,
 )
+from copy import deepcopy
 
 import discord
 from discord.types.interactions import (
@@ -301,31 +302,77 @@ class BotBase(GroupMixin):
             else:
                 for guild in guilds:
                     commands[guild].append(payload)
-
+        
         http: HTTPClient = self.http  # type: ignore
-        global_commands = commands.pop(None, None)
         application_id = self.application_id or (await self.application_info()).id  # type: ignore
-        if global_commands is not None:
-            if self.slash_command_guilds is None:
-                await http.bulk_upsert_global_commands(
-                    payload=global_commands,
-                    application_id=application_id,
-                )
+        upload_commands: Dict[Optional[int], bool] = {}
+
+        for guild, guild_commands in commands.items():
+            
+            guild_commands = sorted(guild_commands, key=lambda c: c['name'])
+
+            if not guild: # Global
+                discord_commands = sorted(await http.get_global_commands(application_id), key=lambda c: c['name'])
             else:
-                for guild in self.slash_command_guilds:
-                    await http.bulk_upsert_guild_commands(
-                        guild_id=guild,
+                discord_commands = sorted(await http.get_guild_commands(application_id, guild), key=lambda c: c['name'])
+
+            for edpy_command, discord_command in zip(guild_commands, discord_commands):
+                edpy_command = deepcopy(edpy_command) # Don't overwrite real    
+                if "options" in edpy_command:
+                    edpy_command['options'] = sorted(edpy_command["options"], key=lambda x: x["name"]) # type: ignore
+                if "options" in discord_command:
+                    discord_command['options'] = sorted(discord_command["options"], key=lambda x: x["name"])
+                
+
+                for key, val in deepcopy(edpy_command).items(): # type: ignore
+                    if key not in discord_command: # Dunno if this can ever happen
+                        continue
+                    
+                    if isinstance(val, list): # key is options
+                        val: List[Dict]
+                        for option in val:
+                            option: dict
+                            if not option['required']:
+                                del option['required'] # Updates the payload
+                    
+                    if val != discord_command[key]:
+                        print(f"{key} is different for {edpy_command['name']}") 
+                        upload_commands[guild] = True
+                        break # We need to update
+                else:
+                    print(f"No differences for {edpy_command['name']}")
+            if guild not in upload_commands: # No changes
+                upload_commands[guild] = False
+
+            print(f"Upload for {guild} : {upload_commands[guild]}")
+        
+        if upload_commands.get(None, False): # Global commands needs to be updated
+            global_commands = commands.pop(None, None)
+
+            if global_commands is not None:
+                if self.slash_command_guilds is None:
+                    await http.bulk_upsert_global_commands(
                         payload=global_commands,
                         application_id=application_id,
                     )
-
+                else:
+                    for guild in self.slash_command_guilds:
+                        await http.bulk_upsert_guild_commands(
+                            guild_id=guild,
+                            payload=global_commands,
+                            application_id=application_id,
+                        )
         for guild, guild_commands in commands.items():
             assert guild is not None
-            await http.bulk_upsert_guild_commands(
-                guild_id=guild,
-                payload=guild_commands,
-                application_id=application_id,
-            )
+            if upload_commands[guild]: # Update only if need be
+                print("Uploading commands for guild", guild)
+                await http.bulk_upsert_guild_commands(
+                    guild_id=guild,
+                    payload=guild_commands,
+                    application_id=application_id,
+                )
+            else:
+                print("No commands to upload for guild", guild)
 
     @discord.utils.copy_doc(discord.Client.close)
     async def close(self) -> None:
