@@ -28,6 +28,8 @@ class InputText(Item):
         style: InputTextStyle = InputTextStyle.short,
         custom_id: Optional[str] = MISSING,
         row: Optional[int] = None,
+        required: Optional[bool] = True,
+        value: Optional[str] = None,
     ):
 
         super().__init__()
@@ -40,6 +42,8 @@ class InputText(Item):
             min_length=min_length,
             max_length=max_length,
             style=style,
+            required=required,
+            value=value,
         )
         self.row = row
 
@@ -73,7 +77,7 @@ class InputText(Item):
 
     @property
     def label(self) -> str:
-        """The label of the input text."""
+        """:class:`str`: The label of the input text."""
         return self._underlying.label
 
     @label.setter
@@ -85,7 +89,7 @@ class InputText(Item):
 
     @property
     def min_length(self) -> Optional[int]:
-        """Optional[:class:`int`]: The minimum length of the input text."""
+        """Optional[:class:`int`]: The minimum length of the input text. Defaults to `0`"""
         return self._underlying.min_length
 
     @min_length.setter
@@ -109,7 +113,7 @@ class InputText(Item):
 
     @property
     def style(self) -> InputTextStyle:
-        """The style of the input text."""
+        """:class:`InputTextStyle`: The style of the input text."""
         return self._underlying.style
 
     @style.setter
@@ -118,6 +122,30 @@ class InputText(Item):
             raise TypeError("style must be InputTextStyle")
 
         self._underlying.style = value
+
+    @property
+    def required(self) -> bool:
+        """Optional[:class:`bool`] Whether the input text is required. Defaults to true."""
+        return self._underlying.required
+
+    @required.setter
+    def required(self, value: bool):
+        if not isinstance(value, bool):
+            raise TypeError("required must be bool")
+
+        self._underlying.required = value
+
+    @property
+    def value(self) -> Optional[str]:
+        """Optional[:class:`str`] The pre filled value of the input text."""
+        return self._underlying.value
+
+    @value.setter
+    def value(self, value: Optional[str]):
+        if value is not None and not isinstance(value, str):
+            raise TypeError("value must be None or str")
+
+        self._underlying.value = value
 
     def to_component_dict(self) -> InputTextPayload:
         return self._underlying.to_dict()

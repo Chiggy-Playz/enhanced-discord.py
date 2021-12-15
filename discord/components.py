@@ -381,6 +381,8 @@ class InputText(Component):
         "placeholder",
         "min_length",
         "max_length",
+        "required",
+        "value",
     )
 
     __repr_info__: ClassVar[Tuple[str, ...]] = __slots__
@@ -393,6 +395,8 @@ class InputText(Component):
         self.placeholder: Optional[str] = data.get("placeholder", None)
         self.min_length: Optional[int] = data.get("min_length", None)
         self.max_length: Optional[int] = data.get("max_length", None)
+        self.required: bool = data.get("required", True)
+        self.value: Optional[str] = data.get("value", None)
 
     def to_dict(self) -> InputTextPayload:
         payload = {"type": 4, "style": self.style.value, "label": self.label}
@@ -408,6 +412,12 @@ class InputText(Component):
 
         if self.max_length:
             payload["max_length"] = self.max_length
+
+        if not self.required:  # Required is True by default
+            payload["required"] = self.required
+
+        if self.value:
+            payload["value"] = self.value
 
         return payload  # type: ignore
 

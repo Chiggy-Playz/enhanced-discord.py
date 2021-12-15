@@ -77,6 +77,8 @@ class _InputTextComponentOptional(TypedDict, total=False):
     min_length: int
     max_length: int
     placeholder: str
+    required: bool
+    value: str
 
 
 class InputText(_InputTextComponentOptional):
