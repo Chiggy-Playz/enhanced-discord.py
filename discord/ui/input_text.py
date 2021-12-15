@@ -34,7 +34,7 @@ class InputText(Item):
 
         super().__init__()
         custom_id = os.urandom(16).hex() if custom_id is MISSING else custom_id
-
+        self._received_value = ""
         self._underlying = InputTextComponent._raw_construct(
             custom_id=custom_id,
             label=label,
@@ -138,17 +138,16 @@ class InputText(Item):
     @property
     def value(self) -> Optional[str]:
         """Optional[:class:`str`] The pre filled value of the input text."""
-        return self._underlying.value
+        return self._received_value or self._underlying.value
 
     @value.setter
     def value(self, value: Optional[str]):
         if value is not None and not isinstance(value, str):
             raise TypeError("value must be None or str")
-
         self._underlying.value = value
 
     def to_component_dict(self) -> InputTextPayload:
         return self._underlying.to_dict()
 
-    def refresh_state(self, interaction: Interaction) -> None:
-        data: ComponentInteractionData = interaction.data  # type: ignore
+    def refresh_state(self, data) -> None:
+        self._received_value = data['value']

@@ -1,11 +1,17 @@
 from __future__ import annotations
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 import os
+
 from .item import Item
 from itertools import groupby
 
 from .view import _ViewWeights as _ModalWeights
+from ..interactions import Interaction
+
+if TYPE_CHECKING:
+    from ..state import ConnectionState
+
 
 __all__ = ("Modal",)
 
@@ -21,12 +27,8 @@ class Modal:
     def __init__(self, title: str, custom_id: Optional[str] = None) -> None:
 
         self.title = title
-        self.custom_id = custom_id
-        self.children = []
-
-        if not custom_id:
-            self.custom_id = os.urandom(16).hex()
-
+        self.custom_id = custom_id or os.urandom(16).hex()
+        self.children: List[Item] = []        
         self.__weights = _ModalWeights(self.children)
 
     def add_item(self, item: Item):
@@ -68,9 +70,58 @@ class Modal:
 
         return components
 
+    async def callback(self, interaction: Interaction):
+        """|coro|
+
+        The callback associated with this Modal.
+
+        This can be overriden by subclasses.
+
+        Parameters
+        -----------
+        interaction: :class:`.Interaction`
+            The interaction that submitted this Modal.
+        """
+        pass
+    
     def to_dict(self) -> Dict[str, Any]:
         return {
             "title": self.title,
             "custom_id": self.custom_id,
             "components": self.to_components(),
         }
+
+
+class ModalStore:
+    def __init__(self, state: ConnectionState) -> None:
+        # (user_id, custom_id) : Modal
+        self._modals: Dict[Tuple[int, str], Modal] = {}
+        self._state = state
+    
+    def add_modal(self, modal: Modal, user_id: int):
+        
+        self._modals[(user_id, modal.custom_id)] = modal 
+    
+    def remove_modal(self, modal: Modal, user_id: int):
+        self._modals.pop((user_id, modal.custom_id)) 
+
+    async def dispatch(self, user_id:int, custom_id: str, interaction: Interaction):
+        
+        key = (user_id, custom_id)
+        modal = self._modals.get(key)
+        if modal is None:
+            return
+        
+        components = [component for action_row in interaction.data['components'] for component in action_row['components']]
+        for component in components:
+            component_custom_id = component['custom_id']    
+        
+            for child in modal.children:
+                if child.custom_id == component_custom_id:  # type: ignore
+                    child.refresh_state(component)
+                    break
+        
+        await modal.callback(interaction)
+        self.remove_modal(modal, user_id)
+
+        

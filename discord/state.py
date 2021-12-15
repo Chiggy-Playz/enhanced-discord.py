@@ -55,6 +55,7 @@ from .invite import Invite
 from .integrations import _integration_factory
 from .interactions import Interaction
 from .ui.view import ViewStore, View
+from .ui.modal import ModalStore, Modal
 from .stage_instance import StageInstance
 from .threads import Thread, ThreadMember
 from .sticker import GuildSticker
@@ -250,11 +251,13 @@ class ConnectionState:
         self._emojis: Dict[int, Emoji] = {}
         self._stickers: Dict[int, GuildSticker] = {}
         self._guilds: Dict[int, Guild] = {}
+        self._modal_store: ModalStore = ModalStore(self)
         if views:
             self._view_store: ViewStore = ViewStore(self)
 
-        self._voice_clients: Dict[int, VoiceProtocol] = {}
 
+        self._voice_clients: Dict[int, VoiceProtocol] = {}
+        
         # LRU of max size 128
         self._private_channels: OrderedDict[int, PrivateChannel] = OrderedDict()
         # extra dict to look up private channels by user id
@@ -363,6 +366,9 @@ class ConnectionState:
 
     def prevent_view_updates_for(self, message_id: int) -> Optional[View]:
         return self._view_store.remove_message_tracking(message_id)
+
+    def store_modal(self, modal: Modal, user_id: int) -> None:
+        self._modal_store.add_modal(modal, user_id)
 
     @property
     def persistent_views(self) -> Sequence[View]:
