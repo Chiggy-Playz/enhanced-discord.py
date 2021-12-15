@@ -150,4 +150,4 @@ class InputText(Item):
         return self._underlying.to_dict()
 
     def refresh_state(self, data) -> None:
-        self._received_value = data['value']
+        self._received_value = data["value"]

@@ -701,7 +701,8 @@ class InteractionResponse:
         )
         self.responded_at = utils.utcnow()
         parent._state.store_modal(modal, parent.user.id)
-        
+
+
 class _InteractionMessageState:
     __slots__ = ("_parent", "_interaction")
 

@@ -6,7 +6,6 @@ from discord.ui import Modal, InputText
 # that user has to answer. The callback function
 # of this class is called when the user submits the modal
 class Modal(Modal):
-
     def __init__(self) -> None:
         super().__init__("My Cool Form 1")
 
@@ -17,18 +16,25 @@ class Modal(Modal):
         # Provide value argument to prefill the input
         # The style parameter allows you to set the style of the input
         # You can choose from short and long
-        self.add_item(InputText(label="What is the meaning of life?", value="The meaning of life is ...", style=discord.InputTextStyle.long))
-    
+        self.add_item(
+            InputText(
+                label="What is the meaning of life?",
+                value="The meaning of life is ...",
+                style=discord.InputTextStyle.long,
+            )
+        )
+
     async def callback(self, interaction: discord.Interaction):
         # Use the interaction object to send a response message containing
         # the user's name or choice. The self object refers to the
         # Modal object, and the values attribute gets a list of the user's
         # answers. We only want the first one.
-        await interaction.response.send_message(f"Your name is {self.children[0].value}\n"
-                                                f"The meaning of life is {self.children[1].value}\n")
+        await interaction.response.send_message(
+            f"Your name is {self.children[0].value}\n" f"The meaning of life is {self.children[1].value}\n"
+        )
+
 
 class ModalView(discord.ui.View):
-    
     @discord.ui.button(label="Open Modal", style=discord.ButtonStyle.green)
     async def open_modal(self, button: discord.Button, interaction: discord.Interaction):
         # Create the modal
@@ -41,7 +47,7 @@ class ModalView(discord.ui.View):
 class Bot(commands.Bot):
     def __init__(self):
         super().__init__(
-            command_prefix=commands.when_mentioned_or("$"), 
+            command_prefix=commands.when_mentioned_or("$"),
             intents=discord.Intents(guilds=True, messages=True),
             slash_commands=True,
         )
@@ -63,6 +69,7 @@ async def form(ctx: commands.Context):
     # Sending a message containing our view
     await ctx.send("Click to open modal:", view=view)
 
+
 # Can also be used from slash commands directly
 @bot.command(message_command=False)
 async def modal(ctx: commands.Context):
@@ -71,5 +78,6 @@ async def modal(ctx: commands.Context):
 
     # Sending our modal
     await ctx.interaction.response.send_modal(modal)
+
 
 bot.run("token")

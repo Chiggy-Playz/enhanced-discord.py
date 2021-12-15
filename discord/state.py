@@ -255,9 +255,8 @@ class ConnectionState:
         if views:
             self._view_store: ViewStore = ViewStore(self)
 
-
         self._voice_clients: Dict[int, VoiceProtocol] = {}
-        
+
         # LRU of max size 128
         self._private_channels: OrderedDict[int, PrivateChannel] = OrderedDict()
         # extra dict to look up private channels by user id

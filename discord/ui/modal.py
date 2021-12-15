@@ -28,7 +28,7 @@ class Modal:
 
         self.title = title
         self.custom_id = custom_id or os.urandom(16).hex()
-        self.children: List[Item] = []        
+        self.children: List[Item] = []
         self.__weights = _ModalWeights(self.children)
 
     def add_item(self, item: Item):
@@ -83,7 +83,7 @@ class Modal:
             The interaction that submitted this Modal.
         """
         pass
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "title": self.title,
@@ -97,31 +97,31 @@ class ModalStore:
         # (user_id, custom_id) : Modal
         self._modals: Dict[Tuple[int, str], Modal] = {}
         self._state = state
-    
-    def add_modal(self, modal: Modal, user_id: int):
-        
-        self._modals[(user_id, modal.custom_id)] = modal 
-    
-    def remove_modal(self, modal: Modal, user_id: int):
-        self._modals.pop((user_id, modal.custom_id)) 
 
-    async def dispatch(self, user_id:int, custom_id: str, interaction: Interaction):
-        
+    def add_modal(self, modal: Modal, user_id: int):
+
+        self._modals[(user_id, modal.custom_id)] = modal
+
+    def remove_modal(self, modal: Modal, user_id: int):
+        self._modals.pop((user_id, modal.custom_id))
+
+    async def dispatch(self, user_id: int, custom_id: str, interaction: Interaction):
+
         key = (user_id, custom_id)
         modal = self._modals.get(key)
         if modal is None:
             return
-        
-        components = [component for action_row in interaction.data['components'] for component in action_row['components']]
+
+        components = [
+            component for action_row in interaction.data["components"] for component in action_row["components"]
+        ]
         for component in components:
-            component_custom_id = component['custom_id']    
-        
+            component_custom_id = component["custom_id"]
+
             for child in modal.children:
                 if child.custom_id == component_custom_id:  # type: ignore
                     child.refresh_state(component)
                     break
-        
+
         await modal.callback(interaction)
         self.remove_modal(modal, user_id)
-
-        
