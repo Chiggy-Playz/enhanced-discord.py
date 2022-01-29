@@ -600,7 +600,7 @@ class ColourConverter(Converter[discord.Colour]):
         Add an alias named ColorConverter
 
     The following formats are accepted:
-    
+
     - ``<hex>``
     - ``0x<hex>``
     - ``#<hex>``
@@ -674,7 +674,7 @@ class ColourConverter(Converter[discord.Colour]):
         method = getattr(discord.Colour, arg, None)
         if method is None:
             return self.parse_hex_number(argument)
-        elif arg.startswith('from_') or not inspect.ismethod(method):
+        elif arg.startswith("from_") or not inspect.ismethod(method):
             raise BadColourArgument(arg)
         return method()
 
