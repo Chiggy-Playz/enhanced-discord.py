@@ -1325,6 +1325,14 @@ class BotBase(GroupMixin):
                 # String with space in without "consume rest"
                 option = cast(_ApplicationCommandInteractionDataOptionString, option)
                 message.content += f" {_quote_string_safe(option['value'])}"
+            elif option["type"] == 11:
+                message.content += f' {option["value"]}'
+                message.attachments.append(
+                    discord.Attachment(
+                        data=interaction.data["resolved"]["attachments"][option['value']],  # no clue how to solve this error
+                        state=self._connection,  # type: ignore
+                    )
+                )
             else:
                 message.content += f' {option.get("value", "")}'
 

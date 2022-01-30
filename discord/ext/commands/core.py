@@ -135,6 +135,7 @@ application_option_type_lookup = {
     (discord.abc.GuildChannel, discord.Thread): 7,
     discord.Role: 8,
     float: 10,
+    discord.Attachment: 11,
 }
 application_option_channel_types = {
     discord.VoiceChannel: [2],
@@ -675,6 +676,12 @@ class Command(_BaseCommand, Generic[CogT, P, T]):
                 else:
                     raise exc
         view.previous = previous
+
+        if converter == discord.Attachment:
+            assert isinstance(argument, str)
+            attachment_id = int(argument)
+            attachment = [attachment for attachment in ctx.message.attachments if attachment.id == attachment_id][0]
+            return attachment
 
         # type-checker fails to narrow argument
         return await run_converters(ctx, converter, argument, param)  # type: ignore
