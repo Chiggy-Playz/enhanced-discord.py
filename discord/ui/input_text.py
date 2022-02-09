@@ -3,29 +3,28 @@ from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import os
 from .item import Item
-from ..enums import InputTextStyle
+from ..enums import TextInputStyle
 from ..utils import MISSING
-from ..components import InputText as InputTextComponent
-from ..interactions import Interaction
+from ..components import TextInput as TextInputComponent
 
 
-__all__ = ("InputText",)
+__all__ = ("TextInput",)
 
 if TYPE_CHECKING:
-    from ..types.components import InputText as InputTextPayload
+    from ..types.components import TextInput as TextInputPayload
     from ..types.interactions import (
         ComponentInteractionData,
     )
 
 
-class InputText(Item):
+class TextInput(Item):
     def __init__(
         self,
         label: str,
         placeholder: Optional[str] = None,
         min_length: Optional[int] = None,
         max_length: Optional[int] = None,
-        style: InputTextStyle = InputTextStyle.short,
+        style: TextInputStyle = TextInputStyle.short,
         custom_id: Optional[str] = MISSING,
         row: Optional[int] = None,
         required: Optional[bool] = True,
@@ -35,7 +34,7 @@ class InputText(Item):
         super().__init__()
         custom_id = os.urandom(16).hex() if custom_id is MISSING else custom_id
         self._received_value = ""
-        self._underlying = InputTextComponent._raw_construct(
+        self._underlying = TextInputComponent._raw_construct(
             custom_id=custom_id,
             label=label,
             placeholder=placeholder,
@@ -53,7 +52,7 @@ class InputText(Item):
 
     @property
     def custom_id(self) -> str:
-        """:class:`str`: The ID of the input text that gets received during an interaction."""
+        """:class:`str`: The ID of the text input that gets received during an interaction."""
         return self._underlying.custom_id
 
     @custom_id.setter
@@ -77,7 +76,7 @@ class InputText(Item):
 
     @property
     def label(self) -> str:
-        """:class:`str`: The label of the input text."""
+        """:class:`str`: The label of the text input."""
         return self._underlying.label
 
     @label.setter
@@ -89,7 +88,7 @@ class InputText(Item):
 
     @property
     def min_length(self) -> Optional[int]:
-        """Optional[:class:`int`]: The minimum length of the input text. Defaults to `0`"""
+        """Optional[:class:`int`]: The minimum length of the text input. Defaults to `0`"""
         return self._underlying.min_length
 
     @min_length.setter
@@ -101,7 +100,7 @@ class InputText(Item):
 
     @property
     def max_length(self) -> Optional[int]:
-        """Optional[:class:`int`]: The maximum length of the input text."""
+        """Optional[:class:`int`]: The maximum length of the text input."""
         return self._underlying.max_length
 
     @max_length.setter
@@ -112,20 +111,20 @@ class InputText(Item):
         self._underlying.max_length = value
 
     @property
-    def style(self) -> InputTextStyle:
-        """:class:`InputTextStyle`: The style of the input text."""
+    def style(self) -> TextInputStyle:
+        """:class:`TextInputStyle`: The style of the text input."""
         return self._underlying.style
 
     @style.setter
-    def style(self, value: InputTextStyle):
-        if not isinstance(value, InputTextStyle):
-            raise TypeError("style must be InputTextStyle")
+    def style(self, value: TextInputStyle):
+        if not isinstance(value, TextInputStyle):
+            raise TypeError("style must be TextInputStyle")
 
         self._underlying.style = value
 
     @property
     def required(self) -> bool:
-        """Optional[:class:`bool`] Whether the input text is required. Defaults to true."""
+        """Optional[:class:`bool`] Whether the text input is required. Defaults to true."""
         return self._underlying.required
 
     @required.setter
@@ -137,7 +136,7 @@ class InputText(Item):
 
     @property
     def value(self) -> Optional[str]:
-        """Optional[:class:`str`] The pre filled value of the input text."""
+        """Optional[:class:`str`] The pre filled value of the text input."""
         return self._received_value or self._underlying.value
 
     @value.setter
@@ -146,7 +145,7 @@ class InputText(Item):
             raise TypeError("value must be None or str")
         self._underlying.value = value
 
-    def to_component_dict(self) -> InputTextPayload:
+    def to_component_dict(self) -> TextInputPayload:
         return self._underlying.to_dict()
 
     def refresh_state(self, data) -> None:

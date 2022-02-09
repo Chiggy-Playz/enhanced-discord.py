@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-from discord.ui import Modal, InputText
+from discord.ui import Modal, TextInput
 
 # Defines a custom Modal with questions
 # that user has to answer. The callback function
@@ -11,16 +11,16 @@ class Modal(Modal):
 
         # Set the questions that will be shown in the modal
         # The placeholder is what will be shown when nothing is typed
-        self.add_item(InputText(label="What is your name?", placeholder="Reveal your secrets!"))
+        self.add_item(TextInput(label="What is your name?", placeholder="Reveal your secrets!"))
 
         # Provide value argument to prefill the input
         # The style parameter allows you to set the style of the input
         # You can choose from short and long
         self.add_item(
-            InputText(
+            TextInput(
                 label="What is the meaning of life?",
                 value="The meaning of life is ...",
-                style=discord.InputTextStyle.long,
+                style=discord.TextInputStyle.long,
             )
         )
 

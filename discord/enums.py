@@ -56,7 +56,7 @@ __all__ = (
     "InteractionResponseType",
     "NSFWLevel",
     "ProtocolURL",
-    "InputTextStyle",
+    "TextInputStyle",
 )
 
 
@@ -665,7 +665,7 @@ class ProtocolURL(Enum):
         return self.value.format(**kwargs)
 
 
-class InputTextStyle(Enum):
+class TextInputStyle(Enum):
 
     short = 1
     long = 2

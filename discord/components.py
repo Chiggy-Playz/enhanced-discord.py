@@ -25,7 +25,7 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 
 from typing import Any, ClassVar, Dict, List, Optional, TYPE_CHECKING, Tuple, Type, TypeVar, Union
-from .enums import try_enum, ComponentType, ButtonStyle, InputTextStyle
+from .enums import try_enum, ComponentType, ButtonStyle, TextInputStyle
 from .utils import get_slots, MISSING
 from .partial_emoji import PartialEmoji, _EmojiTag
 
@@ -36,7 +36,7 @@ if TYPE_CHECKING:
         SelectMenu as SelectMenuPayload,
         SelectOption as SelectOptionPayload,
         ActionRow as ActionRowPayload,
-        InputText as InputTextPayload,
+        TextInput as TextInputPayload,
     )
     from .emoji import Emoji
 
@@ -371,7 +371,7 @@ class SelectOption:
         return payload
 
 
-class InputText(Component):
+class TextInput(Component):
 
     __slots__: Tuple[str, ...] = (
         "type",
@@ -387,18 +387,18 @@ class InputText(Component):
 
     __repr_info__: ClassVar[Tuple[str, ...]] = __slots__
 
-    def __init__(self, data: InputTextPayload) -> None:
+    def __init__(self, data: TextInputPayload) -> None:
         self.type = ComponentType.input_text
         self.custom_id: str = data["custom_id"]
         self.label: str = data["label"]
-        self.style: InputTextStyle = try_enum(InputTextStyle, data["style"])
+        self.style: TextInputStyle = try_enum(TextInputStyle, data["style"])
         self.placeholder: Optional[str] = data.get("placeholder", None)
         self.min_length: Optional[int] = data.get("min_length", None)
         self.max_length: Optional[int] = data.get("max_length", None)
         self.required: bool = data.get("required", True)
         self.value: Optional[str] = data.get("value", None)
 
-    def to_dict(self) -> InputTextPayload:
+    def to_dict(self) -> TextInputPayload:
         payload = {"type": 4, "style": self.style.value, "label": self.label}
 
         if self.custom_id:
