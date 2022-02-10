@@ -2,6 +2,9 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, Dict, List, Optional, Tuple
 
 import os
+import asyncio
+import sys
+import traceback
 
 from .item import Item
 from itertools import groupby
@@ -30,6 +33,9 @@ class Modal:
         self.custom_id = custom_id or os.urandom(16).hex()
         self.children: List[Item] = []
         self.__weights = _ModalWeights(self.children)
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__} {self.title=} {self.custom_id=}>"
 
     def add_item(self, item: Item):
         if not isinstance(item, Item):
@@ -84,13 +90,29 @@ class Modal:
         """
         pass
 
+    async def on_error(self, error: Exception, interaction: Interaction):
+        """|coro|
+
+        The callback for when an error occurs in the :meth:`callback`.
+
+        The default implementation prints the traceback to stderr.
+
+        Parameters
+        -----------
+        error: :class:`Exception`
+            The error that occurred.
+        interaction: :class:`.Interaction`
+            The interaction that submitted this Modal.
+        """
+        print(f"Ignoring exception in modal {self}:", file=sys.stderr)
+        traceback.print_exception(error.__class__, error, error.__traceback__, file=sys.stderr)
+    
     def to_dict(self) -> Dict[str, Any]:
         return {
             "title": self.title,
             "custom_id": self.custom_id,
             "components": self.to_components(),
         }
-
 
 class ModalStore:
     def __init__(self, state: ConnectionState) -> None:
@@ -105,7 +127,13 @@ class ModalStore:
     def remove_modal(self, modal: Modal, user_id: int):
         self._modals.pop((user_id, modal.custom_id))
 
-    async def dispatch(self, user_id: int, custom_id: str, interaction: Interaction):
+    async def _scheduled_task(self, modal: Modal, interaction: Interaction):
+        try:
+            await modal.callback(interaction)
+        except Exception as e:
+            await modal.on_error(e, interaction)
+            
+    def dispatch(self, user_id: int, custom_id: str, interaction: Interaction):
 
         key = (user_id, custom_id)
         modal = self._modals.get(key)
@@ -113,7 +141,7 @@ class ModalStore:
             return
 
         components = [
-            component for action_row in interaction.data["components"] for component in action_row["components"]
+            component for action_row in interaction.data["components"] for component in action_row["components"]  # type: ignore
         ]
         for component in components:
             component_custom_id = component["custom_id"]
@@ -123,5 +151,5 @@ class ModalStore:
                     child.refresh_state(component)
                     break
 
-        await modal.callback(interaction)
+        asyncio.create_task(self._scheduled_task(modal, interaction), name=f"discord-ui-modal-dispatch-{modal.custom_id}")
         self.remove_modal(modal, user_id)
