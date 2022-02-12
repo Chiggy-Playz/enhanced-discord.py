@@ -5,7 +5,7 @@ from discord.ui import Modal, TextInput
 # Defines a custom Modal with questions
 # that user has to answer. The callback function
 # of this class is called when the user submits the modal
-class Modal(Modal):
+class MyModal(Modal):
     def __init__(self) -> None:
         super().__init__("My Cool Form 1")
 
@@ -38,7 +38,7 @@ class ModalView(discord.ui.View):
     @discord.ui.button(label="Open Modal", style=discord.ButtonStyle.green)
     async def open_modal(self, button: discord.Button, interaction: discord.Interaction):
         # Create the modal
-        modal = Modal()
+        modal = MyModal()
 
         # Sending a message containing our modal
         await interaction.response.send_modal(modal)
@@ -74,9 +74,9 @@ async def form(ctx: commands.Context):
 @bot.command(message_command=False)
 async def modal(ctx: commands.Context):
     # Create the modal
-    modal = Modal()
+    modal = MyModal()
 
-    # Sending our modal
+    # Sending the modal
     await ctx.interaction.response.send_modal(modal)
 
 

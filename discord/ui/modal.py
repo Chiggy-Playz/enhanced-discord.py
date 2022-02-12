@@ -139,13 +139,12 @@ class ModalStore:
         modal = self._modals.get(key)
         if modal is None:
             return
-
+        assert interaction.data is not None
         components = [
-            component for action_row in interaction.data["components"] for component in action_row["components"]  # type: ignore
+            component for action_row in interaction.data["components"] for component in action_row["components"] 
         ]
         for component in components:
             component_custom_id = component["custom_id"]
-
             for child in modal.children:
                 if child.custom_id == component_custom_id:  # type: ignore
                     child.refresh_state(component)
