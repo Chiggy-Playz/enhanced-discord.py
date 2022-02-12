@@ -106,13 +106,14 @@ class Modal:
         """
         print(f"Ignoring exception in modal {self}:", file=sys.stderr)
         traceback.print_exception(error.__class__, error, error.__traceback__, file=sys.stderr)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "title": self.title,
             "custom_id": self.custom_id,
             "components": self.to_components(),
         }
+
 
 class ModalStore:
     def __init__(self, state: ConnectionState) -> None:
@@ -132,7 +133,7 @@ class ModalStore:
             await modal.callback(interaction)
         except Exception as e:
             await modal.on_error(e, interaction)
-            
+
     def dispatch(self, user_id: int, custom_id: str, interaction: Interaction):
 
         key = (user_id, custom_id)
@@ -141,7 +142,7 @@ class ModalStore:
             return
         assert interaction.data is not None
         components = [
-            component for action_row in interaction.data["components"] for component in action_row["components"] 
+            component for action_row in interaction.data["components"] for component in action_row["components"]
         ]
         for component in components:
             component_custom_id = component["custom_id"]
@@ -150,5 +151,7 @@ class ModalStore:
                     child.refresh_state(component)
                     break
 
-        asyncio.create_task(self._scheduled_task(modal, interaction), name=f"discord-ui-modal-dispatch-{modal.custom_id}")
+        asyncio.create_task(
+            self._scheduled_task(modal, interaction), name=f"discord-ui-modal-dispatch-{modal.custom_id}"
+        )
         self.remove_modal(modal, user_id)

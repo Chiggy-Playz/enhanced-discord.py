@@ -712,7 +712,7 @@ class ConnectionState:
             custom_id = interaction.data["custom_id"]  # type: ignore
             component_type = interaction.data["component_type"]  # type: ignore
             self._view_store.dispatch(component_type, custom_id, interaction)
-        if data["type"] == 5:  # modal submit   
+        if data["type"] == 5:  # modal submit
             user_id, custom_id = (interaction.user.id, interaction.data["custom_id"])  # type: ignore
             self._modal_store.dispatch(user_id, custom_id, interaction)
         self.dispatch("interaction", interaction)
