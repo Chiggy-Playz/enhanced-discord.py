@@ -76,8 +76,6 @@ if TYPE_CHECKING:
     from discord.role import Role
     from discord.message import Message
     from discord.abc import PartialMessageableChannel
-    from ...state import ConnectionState
-
     from ._types import (
         Check,
         CoroFunc,
@@ -1340,7 +1338,8 @@ class BotBase(GroupMixin):
 
     async def on_interaction(self, interaction: discord.Interaction):
         await self.process_slash_commands(interaction)
-        
+
+
 class Bot(BotBase, discord.Client):
     """Represents a discord bot.
 
