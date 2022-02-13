@@ -19,7 +19,7 @@ class MyModal(Modal):
         self.add_item(
             TextInput(
                 label="What is the meaning of life?",
-                value="The meaning of life is ...",
+                value="The meaning of life is ",
                 style=discord.TextInputStyle.long,
             )
         )
