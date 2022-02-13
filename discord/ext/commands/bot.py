@@ -1329,7 +1329,9 @@ class BotBase(GroupMixin):
                 message.content += f' {option["value"]}'
                 message.attachments.append(
                     discord.Attachment(
-                        data=interaction.data["resolved"]["attachments"][option['value']],  # no clue how to solve this error
+                        data=interaction.data["resolved"]["attachments"][
+                            option["value"]
+                        ],  # no clue how to solve this error
                         state=self._connection,  # type: ignore
                     )
                 )

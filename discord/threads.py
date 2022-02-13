@@ -559,7 +559,7 @@ class Thread(Messageable, Hashable):
         invitable: bool = MISSING,
         slowmode_delay: int = MISSING,
         auto_archive_duration: ThreadArchiveDuration = MISSING,
-        reason: Optional[str] = None
+        reason: Optional[str] = None,
     ) -> Thread:
         """|coro|
 

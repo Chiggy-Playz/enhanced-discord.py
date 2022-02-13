@@ -868,12 +868,13 @@ class GuildStickerConverter(IDConverter[discord.GuildSticker]):
 
         return result
 
+
 class AttachmentConverter(Converter[discord.Attachment]):
     """Converts to a :class:`~discord.Attachment`.
-    
+
     This is done by looping through ctx.message attachments to find the attachment with the id
 
-    .. versionadded:: 2.0    
+    .. versionadded:: 2.0
     """
 
     async def convert(self, ctx: Context, argument: str) -> discord.Attachment:
