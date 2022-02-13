@@ -55,6 +55,7 @@ if TYPE_CHECKING:
     from .role import Role
     from .permissions import Permissions
     from .state import ConnectionState
+    from datetime import datetime
 
 
 class Thread(Messageable, Hashable):
@@ -125,6 +126,10 @@ class Thread(Messageable, Hashable):
         Usually a value of 60, 1440, 4320 and 10080.
     archive_timestamp: :class:`datetime.datetime`
         An aware timestamp of when the thread's archived status was last updated in UTC.
+    created_at: Optional[:class:`datetime.datetime`]
+        Returns the thread's creation time in UTC. This is ``None`` for threads created before January 9, 2022.
+
+        .. versionadded:: 2.0
     """
 
     __slots__ = (
@@ -134,6 +139,7 @@ class Thread(Messageable, Hashable):
         "_type",
         "_state",
         "_members",
+        "created_at",
         "owner_id",
         "parent_id",
         "last_message_id",
@@ -193,6 +199,7 @@ class Thread(Messageable, Hashable):
         self.archive_timestamp = parse_time(data["archive_timestamp"])
         self.locked = data.get("locked", False)
         self.invitable = data.get("invitable", True)
+        self.created_at = parse_time(data.get("create_timestamp"))
 
     def _update(self, data):
         try:
@@ -559,7 +566,7 @@ class Thread(Messageable, Hashable):
         invitable: bool = MISSING,
         slowmode_delay: int = MISSING,
         auto_archive_duration: ThreadArchiveDuration = MISSING,
-        reason: Optional[str] = None
+        reason: Optional[str] = None,
     ) -> Thread:
         """|coro|
 

@@ -25,7 +25,6 @@ DEALINGS IN THE SOFTWARE.
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 import sys
 from typing import (
@@ -88,11 +87,10 @@ if TYPE_CHECKING:
         role,
         user,
         webhook,
-        channel,
         widget,
         threads,
-        voice,
         sticker,
+        welcome_screen,
     )
     from .types.snowflake import Snowflake, SnowflakeList
 
@@ -1379,6 +1377,12 @@ class HTTPClient:
 
     def edit_widget(self, guild_id: Snowflake, payload) -> Response[widget.WidgetSettings]:
         return self.request(Route("PATCH", "/guilds/{guild_id}/widget", guild_id=guild_id), json=payload)
+
+    def get_welcome_screen(self, guild_id: Snowflake) -> Response[welcome_screen.WelcomeScreen]:
+        return self.request(Route("GET", "/guilds/{guild_id}/welcome-screen", guild_id=guild_id))
+
+    def edit_welcome_screen(self, guild_id: Snowflake, payload) -> Response[welcome_screen.WelcomeScreen]:
+        return self.request(Route("PATCH", "/guilds/{guild_id}/welcome-screen", guild_id=guild_id), json=payload)
 
     # Invite management
 

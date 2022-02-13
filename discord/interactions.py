@@ -63,6 +63,7 @@ if TYPE_CHECKING:
     from .ui.view import View
     from .channel import TextChannel, CategoryChannel, StoreChannel, PartialMessageable
     from .threads import Thread
+    from ui.modal import Modal
 
     InteractionChannel = Union[TextChannel, CategoryChannel, StoreChannel, Thread, PartialMessageable]
 
@@ -93,6 +94,14 @@ class Interaction:
         The user or member that sent the interaction.
     message: Optional[:class:`Message`]
         The message that sent this interaction.
+    locale: Optional[:class:`str`]
+        The selected language of the user that invoked
+        this interaction. This is only ``None`` when the
+        interaction is ``InteractionType.ping``.
+    guild_locale: Optional[:class:`str`]
+        The selected language of the guild that this
+        interaction was sent from. This is set in
+        community settings.
     token: :class:`str`
         The token to continue the interaction. These are valid
         for 15 minutes.
@@ -109,6 +118,8 @@ class Interaction:
         "application_id",
         "message",
         "user",
+        "locale",
+        "guild_locale",
         "token",
         "version",
         "_permissions",
@@ -135,6 +146,8 @@ class Interaction:
         self.channel_id: Optional[int] = utils._get_as_snowflake(data, "channel_id")
         self.guild_id: Optional[int] = utils._get_as_snowflake(data, "guild_id")
         self.application_id: int = int(data["application_id"])
+        self.locale: Optional[str] = data.get("locale")
+        self.guild_locale: Optional[str] = data.get("guild_locale")
 
         self.message: Optional[Message]
         try:
@@ -682,6 +695,24 @@ class InteractionResponse:
         )
 
         self.responded_at = utils.utcnow()
+
+    async def send_modal(self, modal: Modal):
+        if self.is_done():
+            raise InteractionResponded(self._parent)
+
+        payload: Dict[str, Any] = modal.to_dict()
+        parent = self._parent
+
+        adapter = async_context.get()
+        await adapter.create_interaction_response(
+            parent.id,
+            parent.token,
+            session=parent._session,
+            type=InteractionResponseType.modal.value,
+            data=payload,
+        )
+        self.responded_at = utils.utcnow()
+        parent._state.store_modal(modal, parent.user.id)
 
 
 class _InteractionMessageState:

@@ -4043,6 +4043,22 @@ Widget
 .. autoclass:: Widget()
     :members:
 
+WelcomeScreen
+~~~~~~~~~~~~~~~
+
+.. attributetable:: WelcomeScreen
+
+.. autoclass:: WelcomeScreen()
+    :members:
+
+WelcomeChannel
+~~~~~~~~~~~~~~~
+
+.. attributetable:: WelcomeChannel
+
+.. autoclass:: WelcomeChannel()
+    :members:
+
 StickerPack
 ~~~~~~~~~~~~~
 
@@ -4400,6 +4416,23 @@ Select
     :inherited-members:
 
 .. autofunction:: discord.ui.select
+
+Modal
+~~~~~~
+
+.. attributetable:: discord.ui.Modal
+
+.. autoclass:: discord.ui.Modal
+    :members:
+
+TextInput
+~~~~~~~~~~
+
+.. attributetable:: discord.ui.TextInput
+
+.. autoclass:: discord.ui.TextInput
+    :members:
+
 
 
 Exceptions
