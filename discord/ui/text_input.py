@@ -18,6 +18,32 @@ if TYPE_CHECKING:
 
 
 class TextInput(Item):
+    """
+    Represents a UI Text Input Field.
+
+    .. versionadded:: 2.0
+
+    Parameters
+    ------------
+    label: :class:`str`
+        The label of the text input.
+    placeholder: Optional[:class:`str`]
+        The placeholder text that is shown if nothing is typed, if any.
+    min_length: Optional[:class:`int`]
+        The minimum length of the text input. Defaults to `0`.
+    max_length: Optional[:class:`int`]
+        The maximum length of the text input.
+    style: :class:`discord.TextInputStyle`
+        The style of the text input.
+    custom_id: Optional[:class:`str`]
+        The ID of the text input that gets received during an interaction.
+    row: Optional[:class:`int`]
+        The row of the text input.
+    required: Optional[:class:`bool`]
+        Whether the text input is required. Defaults to True.
+    value: Optional[:class:`str`]
+        The pre filled value of the text input.
+    """
     def __init__(
         self,
         label: str,
@@ -88,7 +114,7 @@ class TextInput(Item):
 
     @property
     def min_length(self) -> Optional[int]:
-        """Optional[:class:`int`]: The minimum length of the text input. Defaults to `0`"""
+        """Optional[:class:`int`]: The minimum length of the text input. Defaults to `0`."""
         return self._underlying.min_length
 
     @min_length.setter
@@ -112,7 +138,7 @@ class TextInput(Item):
 
     @property
     def style(self) -> TextInputStyle:
-        """:class:`TextInputStyle`: The style of the text input."""
+        """:class:`discord.TextInputStyle`: The style of the text input."""
         return self._underlying.style
 
     @style.setter

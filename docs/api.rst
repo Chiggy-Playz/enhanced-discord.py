@@ -1469,6 +1469,12 @@ of :class:`enum.Enum`.
     .. attribute:: component
 
         Represents a component based interaction, i.e. using the Discord Bot UI Kit.
+    .. attribute:: application_command_autocomplete
+
+        Represents a slash command autocomplete interaction.
+    .. attribute:: modal_submit
+
+        Represents a modal receive interaction.
 
 .. class:: InteractionResponseType
 
@@ -1502,6 +1508,15 @@ of :class:`enum.Enum`.
         Responds to the interaction by editing the message.
 
         See also :meth:`InteractionResponse.edit_message`
+    .. attribute:: application_command_autocomplete_result
+
+        Responds to the interaction with a list of autocomplete results.
+    .. attribute:: modal
+            
+        Responds to the interaction with a modal.
+
+        See also :meth:`InteractionResponse.send_modal`
+
 
 .. class:: ComponentType
 
@@ -2831,6 +2846,23 @@ of :class:`enum.Enum`.
     .. attribute:: library_settings
         
         The URL for the library settings.
+
+.. class:: TextInputStyle
+
+    Represents the style of the text input component.
+
+    .. versionadded:: 2.0
+
+    .. attribute:: short
+
+        Represents a single line text input field. This is the default.
+    .. attribute:: long
+    
+        Represents a multi-line text input field.
+    
+    .. attribute:: paragraph
+
+        An alias for :attr:`long`.
 
 Async Iterator
 ----------------
