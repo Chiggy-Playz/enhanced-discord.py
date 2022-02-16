@@ -697,6 +697,23 @@ class InteractionResponse:
         self.responded_at = utils.utcnow()
 
     async def send_modal(self, modal: Modal):
+        """|coro|
+
+        Responds to this interaction with a modal. 
+        This cannot be used for interactions of type :attr:`InteractionType.modal_submit`.
+
+        Parameters
+        -----------
+        modal: :class:`discord.ui.Modal`
+            The modal to be shown to the user.
+    
+        Raises
+        -------
+        HTTPException
+            Responding to the interaction failed.
+        InteractionResponded
+            This interaction has already been responded to before.
+        """
         if self.is_done():
             raise InteractionResponded(self._parent)
 
