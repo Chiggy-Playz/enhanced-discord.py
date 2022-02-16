@@ -32,7 +32,7 @@ class Modal:
         The title of the modal.
     custom_id: Optional[:class:`str`]
         The ID of the modal that gets received during an interaction.
-    
+
     Attributes
     ------------
     title: :class:`str`

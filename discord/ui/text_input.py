@@ -44,6 +44,7 @@ class TextInput(Item):
     value: Optional[:class:`str`]
         The pre filled value of the text input.
     """
+
     def __init__(
         self,
         label: str,

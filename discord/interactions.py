@@ -699,14 +699,14 @@ class InteractionResponse:
     async def send_modal(self, modal: Modal):
         """|coro|
 
-        Responds to this interaction with a modal. 
+        Responds to this interaction with a modal.
         This cannot be used for interactions of type :attr:`InteractionType.modal_submit`.
 
         Parameters
         -----------
         modal: :class:`discord.ui.Modal`
             The modal to be shown to the user.
-    
+
         Raises
         -------
         HTTPException
