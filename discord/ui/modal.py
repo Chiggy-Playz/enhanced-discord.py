@@ -25,6 +25,22 @@ class Modal:
     This object must be inherited to create a UI within Discord.
 
     .. versionadded:: 2.0
+
+    Parameters
+    ------------
+    title: :class:`str`
+        The title of the modal.
+    custom_id: Optional[:class:`str`]
+        The ID of the modal that gets received during an interaction.
+
+    Attributes
+    ------------
+    title: :class:`str`
+        The title of the modal.
+    custom_id: Optional[:class:`str`]
+        The ID of the modal that gets received during an interaction.
+    children: List[:class:`Item`]
+        The children of the modal.
     """
 
     def __init__(self, title: str, custom_id: Optional[str] = None) -> None:

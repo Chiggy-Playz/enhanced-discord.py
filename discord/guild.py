@@ -194,34 +194,9 @@ class Guild(Hashable):
     default_notifications: :class:`NotificationLevel`
         The guild's notification settings.
     features: List[:class:`str`]
-        A list of features that the guild has. The features that a guild can have are
-        subject to arbitrary change by Discord.
-
-        They are currently as follows:
-
-        - ``ANIMATED_ICON``: Guild can upload an animated icon.
-        - ``BANNER``: Guild can upload and use a banner. (i.e. :attr:`.banner`)
-        - ``COMMERCE``: Guild can sell things using store channels.
-        - ``COMMUNITY``: Guild is a community server.
-        - ``DISCOVERABLE``: Guild shows up in Server Discovery.
-        - ``FEATURABLE``: Guild is able to be featured in Server Discovery.
-        - ``INVITE_SPLASH``: Guild's invite page can have a special splash.
-        - ``MEMBER_VERIFICATION_GATE_ENABLED``: Guild has Membership Screening enabled.
-        - ``MONETIZATION_ENABLED``: Guild has enabled monetization.
-        - ``MORE_EMOJI``: Guild has increased custom emoji slots.
-        - ``MORE_STICKERS``: Guild has increased custom sticker slots.
-        - ``NEWS``: Guild can create news channels.
-        - ``PARTNERED``: Guild is a partnered server.
-        - ``PREVIEW_ENABLED``: Guild can be viewed before being accepted via Membership Screening.
-        - ``PRIVATE_THREADS``: Guild has access to create private threads.
-        - ``SEVEN_DAY_THREAD_ARCHIVE``: Guild has access to the seven day archive time for threads.
-        - ``THREE_DAY_THREAD_ARCHIVE``: Guild has access to the three day archive time for threads.
-        - ``TICKETED_EVENTS_ENABLED``: Guild has enabled ticketed events.
-        - ``VANITY_URL``: Guild can have a vanity invite URL (e.g. discord.gg/discord-api).
-        - ``VERIFIED``: Guild is a verified server.
-        - ``VIP_REGIONS``: Guild has VIP voice regions.
-        - ``WELCOME_SCREEN_ENABLED``: Guild has enabled the welcome screen.
-
+        A list of features that the guild has.
+        Refer to the `API Docs <https://discord.com/developers/docs/resources/guild#guild-object-guild-features>`_
+        for a listing of possible features.
     premium_tier: :class:`int`
         The premium tier for this guild. Corresponds to "Nitro Server" in the official UI.
         The number goes from 0 to 3 inclusive.

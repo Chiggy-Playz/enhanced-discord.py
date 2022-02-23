@@ -1933,6 +1933,9 @@ class HTTPClient:
     def application_info(self) -> Response[appinfo.AppInfo]:
         return self.request(Route("GET", "/oauth2/applications/@me"))
 
+    def get_application(self, app_id: Snowflake) -> Response[appinfo.PartialAppInfo]:
+        return self.request(Route("GET", "/applications/{application_id}/rpc", application_id=app_id))
+
     async def get_gateway(self, *, encoding: str = "json", zlib: bool = True) -> str:
         try:
             data = await self.request(Route("GET", "/gateway"))
